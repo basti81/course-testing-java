@@ -29,16 +29,13 @@ class EmployeeControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+
+    private Employee employee;
     @BeforeEach
     public void setUp() throws Exception{
-
-    }
-
-    @Test
-    public void createObjectEmployee_returnSavedEmployee() throws Exception {
-
+        System.out.println("entre al beforeach");
         // Given - Peticion o configuracion
-        Employee employee = Employee.builder()
+        employee = Employee.builder()
                 .name("Ramesh")
                 .email("ramesh@gmail.com")
                 .password("1234")
@@ -47,6 +44,11 @@ class EmployeeControllerTest {
                 .willAnswer((invocation)-> invocation.getArgument(0));
         given(employeeService.saveEmployee(any(Employee.class))).willAnswer((invocation)-> invocation.getArgument(0));
         System.out.println("Clase creada -> " + employee.toString());
+    }
+
+    @Test
+    public void createObjectEmployee_returnSavedEmployee() throws Exception {
+
 
         // When - Comportamiento que vamos a probar
         ResultActions resultActions = mockMvc.perform(post("/api/employees")
@@ -59,8 +61,6 @@ class EmployeeControllerTest {
                 .andExpect(jsonPath("$.name",is(employee.getName())))
                 .andExpect(jsonPath("$.email", is(employee.getEmail())))
                 .andExpect(jsonPath("$.password", is(employee.getPassword())));
-
-
     }
 
     @Test
@@ -69,5 +69,6 @@ class EmployeeControllerTest {
                 .ContentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(employee)));
            */
+        System.out.println("Entre al test getallemployeebylist");
     }
 }
