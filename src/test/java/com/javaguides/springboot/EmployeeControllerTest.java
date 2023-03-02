@@ -1,6 +1,7 @@
 package com.javaguides.springboot;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,10 @@ class EmployeeControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @BeforeEach
+    public void setUp() throws Exception{
+
+    }
 
     @Test
     public void createObjectEmployee_returnSavedEmployee() throws Exception {
@@ -40,11 +45,11 @@ class EmployeeControllerTest {
                 .build();
         given(employeeService.saveEmployee(any(Employee.class)))
                 .willAnswer((invocation)-> invocation.getArgument(0));
-        given(employeeService.saveEmployee(any(Employee.class))).willAnswer((invocation)-> invocation.getMethod());
+        given(employeeService.saveEmployee(any(Employee.class))).willAnswer((invocation)-> invocation.getArgument(0));
         System.out.println("Clase creada -> " + employee.toString());
 
         // When - Comportamiento que vamos a probar
-        ResultActions resultActions = mockMvc.perform(post("/api/employee")
+        ResultActions resultActions = mockMvc.perform(post("/api/employees")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(employee)));
 
@@ -58,5 +63,11 @@ class EmployeeControllerTest {
 
     }
 
-
+    @Test
+    public void getAllEmployeeByList(){
+        /* ResultActions resultActions = mockMvc.perform(post("/api/employees"))
+                .ContentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(employee)));
+           */
+    }
 }
