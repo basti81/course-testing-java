@@ -3,6 +3,7 @@ package com.javaguides.springboot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +15,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     public EmployeeServiceImpl (EmployeeRepository employeeRepository){
         this.employeeRepository = employeeRepository;
+    }
+
+
+    @Override
+    public void saveAll(List<Employee> listOfEmployee) {
+        employeeRepository.saveAll(listOfEmployee);
     }
 
     @Override
