@@ -118,4 +118,22 @@ class EmployeeControllerTest {
                 .andExpect(jsonPath("$.password",is(updatedEmployee.getPassword())));
 
     }
+    @Test
+    public void givenUpdatedEmployee_whenUpdateEmployee_thenReturnError404() throws Exception {
+        //Given - precondition or setup
+        long employeeId = 1L;
+        Employee savedEmployee = Employee.builder().name("Alex").email("alex@mail.com").password("1234").build();
+        Employee updatedEmployee = Employee.builder().name("Alex").email("alex@mail.com").password("1234").build();
+        given(employeeService.getEmployeeById(employeeId)).willReturn(Optional.empty());
+        given(employeeService.updateEmployee(any(Employee.class))).willAnswer((invocation) -> invocation.getArgument(0));
+
+        //When - action or method
+        ResultActions resultActions = mockMvc.perform(delete("/api/employees/delete/{id}",employeeId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedEmployee)));
+
+        //Then - verify the output
+        resultActions.andExpect(status().isNotFound())
+                .andDo(print());
+    }
 }
