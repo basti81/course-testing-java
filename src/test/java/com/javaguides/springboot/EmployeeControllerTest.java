@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
@@ -67,16 +68,32 @@ class EmployeeControllerTest {
         List<Employee> listOfEmployee = new ArrayList<>();
         listOfEmployee.add(Employee.builder().name("Alex").email("alex@mail.com").password("1234").build());
         listOfEmployee.add(Employee.builder().name("Joe ").email("joe@mail.com").password("123456").build());
-
-        //Method return - getlistOfEmployee
-        given(employeeService.getAllEmployees()).willReturn(listOfEmployee);
+        given(employeeService.getAllEmployees()).willReturn(listOfEmployee); //Method return - getlistOfEmployee
         //When - action or method
         ResultActions resultActions = mockMvc.perform(get("/api/employees/listOfEmployee"));
-
         //Then - verify the output
         resultActions.andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(jsonPath("$.size()",is(listOfEmployee.size())));
 
     }
+
+    @Test
+    public void givenEmployeeId_whengetEmployeeById_thenReturnEmployeeObject() throws Exception {
+        //Given - precondition or setup
+        long employeeId = 1L;
+        Employee employee = Employee.builder().name("Alex").email("alex@mail.com").password("1234").build();
+        given(employeeService.getEmployeeById(employeeId)).willReturn(Optional.of(employee));
+
+        //When - action or method
+        ResultActions resultActions = mockMvc.perform(get("/api/employees/{id}",employeeId));
+
+        //Then - verify the output
+        resultActions.andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.name",is(employee.getName())))
+                .andExpect(jsonPath("$.email",is(employee.getEmail())))
+                .andExpect(jsonPath("$.password",is(employee.getPassword())));
+    }
+
 }
