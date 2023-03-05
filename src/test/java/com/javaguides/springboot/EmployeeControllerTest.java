@@ -96,4 +96,26 @@ class EmployeeControllerTest {
                 .andExpect(jsonPath("$.password",is(employee.getPassword())));
     }
 
+    @Test
+    public void givenUpdatedEmployee_whenUpdateEmployee_thenReturnEmployeeObject() throws Exception {
+        //Given - precondition or setup
+        long employeeId = 1L;
+        Employee savedEmployee = Employee.builder().name("Alex").email("alex@mail.com").password("1234").build();
+        Employee updatedEmployee = Employee.builder().name("Remy").email("remy@mail.com").password("1234").build();
+        given(employeeService.getEmployeeById(employeeId)).willReturn(Optional.of(savedEmployee));
+        given(employeeService.updateEmployee(any(Employee.class))).willAnswer((invocation)-> invocation.getArgument(0));
+
+        //When - action or method
+        ResultActions resultActions = mockMvc.perform(put("/api/employees/{id}",employeeId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedEmployee)));
+
+        //Then - verify the output
+        resultActions.andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.name",is(updatedEmployee.getName())))
+                .andExpect(jsonPath("$.email",is(updatedEmployee.getEmail())))
+                .andExpect(jsonPath("$.password",is(updatedEmployee.getPassword())));
+
+    }
 }
