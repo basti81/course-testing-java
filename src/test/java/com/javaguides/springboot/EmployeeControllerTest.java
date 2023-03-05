@@ -31,12 +31,9 @@ class EmployeeControllerTest {
     private MockMvc mockMvc;
     @MockBean
     private EmployeeService employeeService;
-
     @Autowired
     private ObjectMapper objectMapper;
-
     private Employee employee;
-
 
     @Test
     public void createObjectEmployee_returnSavedEmployee() throws Exception {
@@ -47,8 +44,8 @@ class EmployeeControllerTest {
                 .email("ramesh@gmail.com")
                 .password("1234")
                 .build();
-        given(employeeService.saveEmployee(any(Employee.class)))
-                .willAnswer((invocation)-> invocation.getArgument(0));
+
+        //Method return - saveEmployee
         given(employeeService.saveEmployee(any(Employee.class))).willAnswer((invocation)-> invocation.getArgument(0));
 
         // When - action or method
@@ -71,16 +68,15 @@ class EmployeeControllerTest {
         listOfEmployee.add(Employee.builder().name("Alex").email("alex@mail.com").password("1234").build());
         listOfEmployee.add(Employee.builder().name("Joe ").email("joe@mail.com").password("123456").build());
 
+        //Method return - getlistOfEmployee
+        given(employeeService.getAllEmployees()).willReturn(listOfEmployee);
         //When - action or method
-        employeeService.saveAll(listOfEmployee);
-        ResultActions resultActions = mockMvc.perform(get("/api/employees/listOfEmployee")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(employee)));
+        ResultActions resultActions = mockMvc.perform(get("/api/employees/listOfEmployee"));
 
         //Then - verify the output
         resultActions.andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(jsonPath("$.size()",is(listOfEmployee)));
+                .andExpect(jsonPath("$.size()",is(listOfEmployee.size())));
 
     }
 }

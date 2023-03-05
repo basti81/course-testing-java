@@ -24,6 +24,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/listOfEmployee")
+    @ResponseStatus(HttpStatus.OK)
     public List<Employee> getAllEmployee(){
         return employeeService.getAllEmployees();
     }
