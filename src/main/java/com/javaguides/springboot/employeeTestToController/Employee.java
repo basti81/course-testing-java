@@ -1,4 +1,4 @@
-package com.javaguides.springboot;
+package com.javaguides.springboot.employeeTestToController;
 
 import lombok.*;
 import org.springframework.boot.autoconfigure.domain.EntityScan;

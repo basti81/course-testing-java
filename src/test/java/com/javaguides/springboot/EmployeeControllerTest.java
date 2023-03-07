@@ -1,12 +1,10 @@
 package com.javaguides.springboot;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
+import com.javaguides.springboot.employeeTestToController.Employee;
+import com.javaguides.springboot.employeeTestToController.EmployeeService;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -18,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -142,7 +139,7 @@ class EmployeeControllerTest {
     public void givenEmployeeId_whenDeleteEmployee_thenReturnError202() throws Exception {
         // given - precondition or setup
         long employeeId = 1L;
-        willDoNothing().given(employeeService.deleteEmployee(employeeId));
+        willDoNothing().given(employeeService).deleteEmployee(employeeId);
 
         // when -  action or the behaviour that we are going test
         ResultActions response = mockMvc.perform(delete("/api/employees/{id}", employeeId));
