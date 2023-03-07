@@ -21,6 +21,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -135,5 +136,20 @@ class EmployeeControllerTest {
         //Then - verify the output
         resultActions.andExpect(status().isNotFound())
                 .andDo(print());
+    }
+
+    @Test
+    public void givenEmployeeId_whenDeleteEmployee_thenReturnError202() throws Exception {
+        // given - precondition or setup
+        long employeeId = 1L;
+        willDoNothing().given(employeeService.deleteEmployee(employeeId));
+
+        // when -  action or the behaviour that we are going test
+        ResultActions response = mockMvc.perform(delete("/api/employees/{id}", employeeId));
+
+        // then - verify the output
+        response.andExpect(status().isOk())
+                .andDo(print());
+
     }
 }
